@@ -15,35 +15,35 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaSenderConfig {
-	  @Value("${spring.kafka.bootstrap-servers}")
-	    private String bootstrapServers;
+   @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
 
-	    @Bean
-	    public Map<String, Object> producerConfigs() {
-	        Map<String, Object> props = new HashMap<>();
-	        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-	        
-	        
-	        
-	        //partition config
-	       // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,CountryPartition.class.getCanonicalName());
-	       // props.put("partitions.1","USA");
-	       // props.put("partition.2","India");
-	        
-	        
-	        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-	        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-	        return props;
-	    }
+    @Bean
+    public Map<String, Object> producerConfigs() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        
+        
+        
+        //partition config
+       // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,CountryPartition.class.getCanonicalName());
+       // props.put("partitions.1","USA");
+       // props.put("partition.2","India");
+        
+        
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return props;
+    }
 
-	    @Bean
-	    public ProducerFactory<String, HashMap<String, String>> producerFactory() {
-	        return new DefaultKafkaProducerFactory<>(producerConfigs());
-	    }
+    @Bean
+    public ProducerFactory<String, HashMap<String, Object>> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
 
-	    @Bean
-	    public KafkaTemplate<String, HashMap<String, String>> kafkaTemplate() {
-	        return new KafkaTemplate<>(producerFactory());
-	    }
+    @Bean
+    public KafkaTemplate<String, HashMap<String, Object>> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
 
 }
