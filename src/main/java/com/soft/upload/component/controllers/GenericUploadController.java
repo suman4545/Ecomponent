@@ -34,11 +34,11 @@ public class GenericUploadController {
 	public ResponseEntity<UploadFileResponse> uploadFile(@ModelAttribute PartsDeatilsMap reqMapBody) {
 		System.out.println(reqMapBody.getPartMap());
 		ObjectMapper mapper = new ObjectMapper();
-		HashMap<String, String> reqMAp = new HashMap<String, String>();
+		HashMap<String, Object> reqMAp = new HashMap<String, Object>();
 		// convert JSON string to Map
 		UploadFileResponse res = null;
 		try {
-			reqMAp = mapper.readValue(reqMapBody.getPartMap(), new TypeReference<Map<String, String>>() {});
+			reqMAp = mapper.readValue(reqMapBody.getPartMap(), new TypeReference<Map<String, Object>>() {});
 			KAFKASERVER_OBJ.sendkafkaMsg(reqMAp);
 			res = FILE_SERVICE_OBJ.storeFile(reqMapBody.getFile());
 			return new ResponseEntity<UploadFileResponse>(res, HttpStatus.OK);

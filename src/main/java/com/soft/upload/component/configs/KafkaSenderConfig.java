@@ -1,4 +1,4 @@
-package com.soft.upload.configs;
+package com.soft.upload.component.configs;
 import java.util.HashMap;
 import java.util.Map;
 

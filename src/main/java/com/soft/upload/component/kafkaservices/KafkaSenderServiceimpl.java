@@ -15,13 +15,13 @@ public class KafkaSenderServiceimpl {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaSenderServiceimpl.class);
 
 	@Autowired
-	private KafkaTemplate kafkaTemplate;
+	private KafkaTemplate<String, HashMap<String, Object>> kafkaTemplate;
 	// private KafkaTemplate<String, HashMap> kafkaTemplate;
 
 	@Value("${app.topic.foo}")
 	private String topic;
 
-	public void sendkafkaMsg(HashMap<String, String> msgmap) {
+	public void sendkafkaMsg(HashMap<String, Object> msgmap) {
 		// public void send(String msgmap,String partition){
 
 		// System.out.println("sending message="+message+ "to topic="+topic+""
