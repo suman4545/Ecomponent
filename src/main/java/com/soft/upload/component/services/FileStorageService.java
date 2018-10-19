@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.soft.upload.component.dao.service.FileuploadServiceImpl;
+import com.soft.upload.component.models.PartFileBean;
 import com.soft.upload.component.models.UploadFileResponse;
 
 @Service
@@ -29,6 +31,8 @@ public class FileStorageService {
 		CreateUploadResponse UPLOADservice_obj;	
 		@Autowired
 		FTPFileuploadService FTPService_OBJ;
+		@Autowired
+		FileuploadServiceImpl fileDaoService;
 		
 		
 		
@@ -44,25 +48,32 @@ public class FileStorageService {
 	        }
 	    }
 
-	    public UploadFileResponse storeFile(MultipartFile file) {
+	    public UploadFileResponse storeFile(PartFileBean reqMapBody) {
 	    	UploadFileResponse uploadres=null;
 	        // Normalize file name
-	        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	        String fileName = StringUtils.cleanPath(reqMapBody.getFile().getOriginalFilename());
+	        MultipartFile file=null;
 
 	        try {
 	            // Check if the file's name contains invalid characters
 	            if(fileName.contains("..")) {
 	            	System.out.println("errror");
+	            	file=reqMapBody.getFile();
 	               // throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
 	            }
 
 	            // Copy file to the target location (Replacing existing file with the same name)
 	           // Path targetLocation = this.fileStorageLocation.resolve(fileName);	            
 	            //Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-	            FTPService_OBJ.ftpUpload(file);
+	            FTPService_OBJ.ftpUpload(reqMapBody.getFile());
 	            
 	            
-	            uploadres=UPLOADservice_obj.uploadfileResponse(file);
+	            uploadres=UPLOADservice_obj.uploadfileResponse(reqMapBody.getFile());
+	            reqMapBody.setUploadFile(uploadres);
+				
+				if(uploadres.getFileDownloadUri()!=null) {
+					fileDaoService.save(reqMapBody);
+				}
 	           
 	        } catch (Exception ex) {
 	        	ex.printStackTrace();

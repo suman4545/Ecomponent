@@ -16,17 +16,10 @@ public class KafkaSenderServiceimpl {
 
 	@Autowired
 	private KafkaTemplate<String, HashMap<String, Object>> kafkaTemplate;
-	// private KafkaTemplate<String, HashMap> kafkaTemplate;
-
 	@Value("${app.topic.foo}")
 	private String topic;
 
 	public void sendkafkaMsg(HashMap<String, Object> msgmap) {
-		// public void send(String msgmap,String partition){
-
-		// System.out.println("sending message="+message+ "to topic="+topic+""
-		// );
-
 		try {
 			kafkaTemplate.send(topic, msgmap);
 			System.out.println("sending message=" + msgmap + "to topic=" + topic + "");

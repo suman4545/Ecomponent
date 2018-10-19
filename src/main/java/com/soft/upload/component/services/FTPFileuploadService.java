@@ -7,18 +7,26 @@ import java.io.InputStream;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FTPFileuploadService {
 	
+	@Value("${app.ftp.server}")
+	private String server;
+	@Value("${app.ftp.port}")
+	private int port;
+	@Value("${app.ftp.username}")
+	private String user;
+	@Value("${app.ftp.password}")
+	private String pass;
+	
+	
 	public boolean ftpUpload(MultipartFile file){
 	boolean returnRES=false;
-	 String server = "localhost";
-     int port = 21;
-     String user = "suman";
-     String pass = "suman4321";
+	 
      
      FTPClient ftpClient = new FTPClient();
      try {
